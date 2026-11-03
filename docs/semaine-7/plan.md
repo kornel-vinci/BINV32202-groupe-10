@@ -13,8 +13,11 @@ sans modifier la migration initiale.
 1. **Candidater**
    - Ajouter une route backend protégée permettant à un étudiant de créer une
      candidature sur une offre `PUBLISHED`, avec message facultatif.
-   - Refuser les profils non étudiants, les offres non publiées et les doublons actifs
-     ou retirés selon la règle métier retenue.
+   - Refuser les profils non étudiants et les offres non publiées.
+   - Garantir une seule candidature active (`IN_PROGRESS`) par étudiant et par offre.
+     Une seconde tentative alors qu'une candidature active existe renvoie HTTP 409 avec
+     le code `APPLICATION_ALREADY_EXISTS`. Après `WITHDRAWN`, une nouvelle candidature
+     est autorisée et crée une nouvelle ligne historique.
    - Ajouter dans la liste des offres un bouton « Candidater » et un formulaire/message,
      en conservant la liste comme point d’entrée.
 
@@ -76,9 +79,12 @@ sans modifier la migration initiale.
 
 Les valeurs proposées ci-dessous servent de défaut pour l’implémentation :
 
-1. **Nouvelle candidature après retrait** : autoriser une nouvelle candidature pour la
-   même offre. Chaque candidature garde son historique ; l’unicité structurelle devra
-   donc être limitée aux candidatures actives/non retirées.
+1. **Candidatures en double** : une seule candidature `IN_PROGRESS` est autorisée par
+   étudiant et par offre. Toute tentative supplémentaire est refusée par le backend
+   avec HTTP 409 / `APPLICATION_ALREADY_EXISTS`. Le frontend masque ou désactive
+   « Candidater » quand il connaît déjà cette candidature active, sans remplacer la
+   protection backend. Une candidature `WITHDRAWN` reste dans l’historique ; une
+   nouvelle candidature est alors autorisée.
 2. **Longueur du message** : 500 caractères maximum, avec chaîne vide normalisée en
    `null`.
 3. **Visibilité du message** : le retourner uniquement à l’étudiant propriétaire dans
