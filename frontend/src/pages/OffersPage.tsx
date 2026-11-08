@@ -2,6 +2,7 @@ import EmptyState from "../components/EmptyState.tsx";
 import ErrorState from "../components/ErrorState.tsx";
 import LoadingState from "../components/LoadingState.tsx";
 import OfferTable from "../components/OfferTable.tsx";
+import { applyToOffer } from "../services/applications.service.ts";
 import { useOffers } from "../hooks/useOffers.ts";
 import type { User } from "../models/user.ts";
 
@@ -29,7 +30,11 @@ const OffersPage = ({ user, token, onUnauthorized }: OffersPageProps) => {
         <p className="result-count">
           {offers.length} offre{offers.length > 1 ? "s" : ""}
         </p>
-        <OfferTable offers={offers} />
+        <OfferTable
+          offers={offers}
+          canApply={user.kind === "STUDENT"}
+          onApply={(offerId, message) => applyToOffer(token, offerId, message)}
+        />
       </>
     );
   };
