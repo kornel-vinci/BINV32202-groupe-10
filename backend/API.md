@@ -203,3 +203,23 @@ ou `WITHDRAWN` (Retirée).
 
 - `401` `UNAUTHENTICATED` : session absente ou invalide.
 - `403` `FORBIDDEN` : l'utilisateur connecté n'est pas un étudiant.
+
+## DELETE /applications/:id
+
+Retire la candidature de l'étudiant connecté. Cette action est possible uniquement
+tant que la candidature est `IN_PROGRESS` ; elle conserve la candidature avec le statut
+`WITHDRAWN`.
+
+### Requête
+
+- Header `Authorization` obligatoire
+- Paramètre de chemin `id` : identifiant positif de la candidature
+
+### Réponses
+
+- `204` : candidature retirée, sans contenu
+- `400` `INVALID_QUERY` : identifiant invalide
+- `401` `UNAUTHENTICATED` : session absente ou invalide
+- `403` `FORBIDDEN` : l'utilisateur connecté n'est pas un étudiant
+- `404` `NOT_FOUND` : candidature absente ou appartenant à un autre étudiant
+- `409` `APPLICATION_ALREADY_PROCESSED` : candidature déjà traitée ou déjà retirée

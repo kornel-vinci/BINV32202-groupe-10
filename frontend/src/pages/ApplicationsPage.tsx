@@ -17,7 +17,7 @@ interface ApplicationsPageProps {
 }
 
 const ApplicationsPage = ({ token, onUnauthorized }: ApplicationsPageProps) => {
-  const { applications, isLoading, error } = useApplications(token, onUnauthorized);
+  const { applications, isLoading, error, withdraw } = useApplications(token, onUnauthorized);
 
   if (error) return <ErrorState message={error} />;
   if (isLoading) return <LoadingState />;
@@ -36,6 +36,7 @@ const ApplicationsPage = ({ token, onUnauthorized }: ApplicationsPageProps) => {
               <th scope="col">Période</th>
               <th scope="col">Message</th>
               <th scope="col">Statut</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -51,6 +52,17 @@ const ApplicationsPage = ({ token, onUnauthorized }: ApplicationsPageProps) => {
                     label={APPLICATION_STATUS_LABELS[application.status]}
                     tone={APPLICATION_STATUS_TONES[application.status]}
                   />
+                </td>
+                <td>
+                  {application.status === "IN_PROGRESS" && (
+                    <button
+                      className="button"
+                      type="button"
+                      onClick={() => void withdraw(application.id)}
+                    >
+                      Retirer
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import type { Application } from "../models/application.ts";
-import { getApplications } from "../services/applications.service.ts";
+import {
+  getApplications,
+  withdrawApplication,
+} from "../services/applications.service.ts";
 import { isUnauthorized } from "../utils/api.ts";
 
 export const useApplications = (token: string, onUnauthorized: () => void) => {
@@ -27,5 +30,16 @@ export const useApplications = (token: string, onUnauthorized: () => void) => {
     return () => controller.abort();
   }, [token, onUnauthorized]);
 
-  return { applications, isLoading, error };
+  const withdraw = async (applicationId: number) => {
+    await withdrawApplication(token, applicationId);
+    setApplications((current) =>
+      current.map((application) =>
+        application.id === applicationId
+          ? { ...application, status: "WITHDRAWN" }
+          : application,
+      ),
+    );
+  };
+
+  return { applications, isLoading, error, withdraw };
 };

@@ -23,3 +23,13 @@ export const applyToOffer = async (
   });
   await readJson(response, isApplication, "Candidature impossible");
 };
+
+export const withdrawApplication = async (token: string, applicationId: number): Promise<void> => {
+  const response = await fetch(`${API_URL}/applications/${applicationId}`, {
+    method: "DELETE",
+    headers: { Authorization: token },
+  });
+  if (!response.ok) {
+    throw new Error(`Retrait impossible (statut ${response.status})`);
+  }
+};

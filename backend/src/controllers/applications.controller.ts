@@ -11,6 +11,14 @@ const parsePositiveInteger = (value: unknown): number => {
   return value;
 };
 
+const parseApplicationId = (value: string): number => {
+  const id = Number(value);
+  if (!Number.isInteger(id) || id <= 0) {
+    throw new HttpError(400, "INVALID_QUERY", "L'identifiant de candidature est invalide");
+  }
+  return id;
+};
+
 export const createApplicationsRouter = (service: ApplicationsService) => {
   const router = Router();
 
@@ -35,6 +43,11 @@ export const createApplicationsRouter = (service: ApplicationsService) => {
 
     const application = service.apply(getCurrentUser(req), offerId, message);
     res.status(201).json(toApplicationDto(application));
+  });
+
+  router.delete("/:id", (req, res) => {
+    service.withdraw(getCurrentUser(req), parseApplicationId(req.params.id));
+    res.status(204).send();
   });
 
   return router;

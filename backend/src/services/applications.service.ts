@@ -34,6 +34,30 @@ export const createApplicationsService = (repository: ApplicationsRepository) =>
 
     return toApplication(repository.create({ offerId, studentId: viewer.id, message }));
   },
+  withdraw: (viewer: User, applicationId: number): void => {
+    if (!isStudent(viewer)) {
+      throw new HttpError(403, "FORBIDDEN", "Seul un étudiant peut retirer une candidature");
+    }
+
+    const application = repository.findByStudent(viewer.id).find(({ id }) => id === applicationId);
+    if (!application) {
+      throw new HttpError(404, "NOT_FOUND", "Candidature introuvable");
+    }
+    if (application.status !== "IN_PROGRESS") {
+      throw new HttpError(
+        409,
+        "APPLICATION_ALREADY_PROCESSED",
+        "Cette candidature a déjà été traitée",
+      );
+    }
+    if (!repository.withdraw(applicationId, viewer.id)) {
+      throw new HttpError(
+        409,
+        "APPLICATION_ALREADY_PROCESSED",
+        "Cette candidature a déjà été traitée",
+      );
+    }
+  },
 });
 
 export type ApplicationsService = ReturnType<typeof createApplicationsService>;

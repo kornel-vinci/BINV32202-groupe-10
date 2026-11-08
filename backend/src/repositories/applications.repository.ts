@@ -11,6 +11,11 @@ interface ApplicationParams {
   message: string | null;
 }
 
+interface ApplicationIdParams {
+  id: number;
+  studentId: number;
+}
+
 export const createApplicationsRepository = (db: Db) => {
   const applicationFields = `
     SELECT a.id, a.offer_id, a.student_id, a.message, a.status, a.applied_at,
@@ -48,6 +53,13 @@ export const createApplicationsRepository = (db: Db) => {
     ${applicationFields}
     WHERE a.id = @id AND a.student_id = @studentId
   `);
+  const withdrawApplication = db.prepare<ApplicationIdParams>(`
+    UPDATE applications
+    SET status = 'WITHDRAWN'
+    WHERE id = @id
+      AND student_id = @studentId
+      AND status = 'IN_PROGRESS'
+  `);
 
   return {
     findByStudent: (studentId: number): ApplicationDbo[] =>
@@ -64,6 +76,8 @@ export const createApplicationsRepository = (db: Db) => {
       if (!application) throw new Error("Candidature créée introuvable");
       return application;
     },
+    withdraw: (id: number, studentId: number): boolean =>
+      withdrawApplication.run({ id, studentId }).changes === 1,
   };
 };
 
