@@ -7,6 +7,10 @@ export const toApplication = (row: ApplicationDbo): Application => ({
   message: row.message,
   status: row.status,
   appliedAt: row.applied_at,
+  offerTitle: row.offer_title,
+  companyShortName: row.company_short_name,
+  academicYear: row.academic_year_label,
+  period: row.period_code,
 });
 
 export const toApplicationDto = (application: Application): ApplicationDto => ({
@@ -15,4 +19,8 @@ export const toApplicationDto = (application: Application): ApplicationDto => ({
   message: application.message,
   status: application.status,
   appliedAt: application.appliedAt,
+  offerTitle: application.offerTitle,
+  companyShortName: application.companyShortName,
+  academicYear: application.academicYear,
+  period: application.period,
 });

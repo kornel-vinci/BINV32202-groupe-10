@@ -1,5 +1,12 @@
 import { API_URL, readJson } from "../utils/api.ts";
-import { isApplication } from "../utils/guards.ts";
+import { isApplication, isApplicationList } from "../utils/guards.ts";
+
+export const getApplications = async (token: string) => {
+  const response = await fetch(`${API_URL}/applications`, {
+    headers: { Authorization: token },
+  });
+  return readJson(response, isApplicationList, "Chargement des candidatures impossible");
+};
 
 export const applyToOffer = async (
   token: string,

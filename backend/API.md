@@ -168,3 +168,38 @@ récente à la plus ancienne, puis de la plus récente à la plus ancienne.
 
 - `401` `UNAUTHENTICATED` : session absente ou invalide.
 - `403` `FORBIDDEN` : contact seulement promoteur ou signataire.
+
+## GET /applications
+
+Retourne les candidatures de l'étudiant connecté, triées de la plus récente à la plus
+ancienne. Un autre profil reçoit `403`.
+
+### Requête
+
+- Header `Authorization` obligatoire
+
+### Réponses
+
+- `200` : tableau de candidatures
+
+```json
+[
+  {
+    "id": 1,
+    "offerId": 1,
+    "offerTitle": "Application React de gestion de flotte",
+    "companyShortName": "Lumen Digital",
+    "academicYear": "2026-2027",
+    "period": "P2",
+    "message": "Le développement React m'intéresse particulièrement.",
+    "status": "IN_PROGRESS",
+    "appliedAt": "2026-10-02 18:10:00"
+  }
+]
+```
+
+`status` vaut `IN_PROGRESS` (En cours), `SELECTED` (Retenue), `REJECTED` (Non retenue)
+ou `WITHDRAWN` (Retirée).
+
+- `401` `UNAUTHENTICATED` : session absente ou invalide.
+- `403` `FORBIDDEN` : l'utilisateur connecté n'est pas un étudiant.

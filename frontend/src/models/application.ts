@@ -13,4 +13,8 @@ export interface Application {
   message: string | null;
   status: ApplicationStatus;
   appliedAt: string;
+  offerTitle: string;
+  companyShortName: string;
+  academicYear: string;
+  period: "P1" | "P2" | "OTHER";
 }

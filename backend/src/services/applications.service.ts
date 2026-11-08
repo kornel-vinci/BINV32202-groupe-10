@@ -8,6 +8,12 @@ import { isStudent } from "./permissions.ts";
 const MAX_MESSAGE_LENGTH = 500;
 
 export const createApplicationsService = (repository: ApplicationsRepository) => ({
+  listMine: (viewer: User): Application[] => {
+    if (!isStudent(viewer)) {
+      throw new HttpError(403, "FORBIDDEN", "Seul un étudiant peut consulter ses candidatures");
+    }
+    return repository.findByStudent(viewer.id).map(toApplication);
+  },
   apply: (viewer: User, offerId: number, message: string | null): Application => {
     if (!isStudent(viewer)) {
       throw new HttpError(403, "FORBIDDEN", "Seul un étudiant peut candidater");

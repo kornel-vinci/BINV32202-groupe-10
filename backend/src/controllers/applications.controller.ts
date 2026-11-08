@@ -14,6 +14,10 @@ const parsePositiveInteger = (value: unknown): number => {
 export const createApplicationsRouter = (service: ApplicationsService) => {
   const router = Router();
 
+  router.get("/", (req, res) => {
+    res.json(service.listMine(getCurrentUser(req)).map(toApplicationDto));
+  });
+
   router.post("/", (req, res) => {
     if (typeof req.body !== "object" || req.body === null || Array.isArray(req.body)) {
       throw new HttpError(400, "INVALID_BODY", "Le corps doit être un objet JSON");
