@@ -6,12 +6,21 @@ import {
 } from "../services/applications.service.ts";
 import { isUnauthorized } from "../utils/api.ts";
 
-export const useApplications = (token: string, onUnauthorized: () => void) => {
+export const useApplications = (
+  token: string,
+  onUnauthorized: () => void,
+  enabled = true,
+) => {
   const [applications, setApplications] = useState<Application[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!enabled) {
+      setIsLoading(false);
+      return;
+    }
+
     const controller = new AbortController();
 
     getApplications(token)
@@ -28,7 +37,7 @@ export const useApplications = (token: string, onUnauthorized: () => void) => {
       });
 
     return () => controller.abort();
-  }, [token, onUnauthorized]);
+  }, [token, onUnauthorized, enabled]);
 
   const withdraw = async (applicationId: number) => {
     await withdrawApplication(token, applicationId);

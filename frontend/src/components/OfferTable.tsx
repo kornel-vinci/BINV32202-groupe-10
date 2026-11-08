@@ -6,10 +6,16 @@ import StatusBadge from "./StatusBadge.tsx";
 interface OfferTableProps {
   offers: Offer[];
   canApply?: boolean;
+  activeOfferIds?: Set<number>;
   onApply?: (offerId: number, message: string) => Promise<void>;
 }
 
-const OfferTable = ({ offers, canApply = false, onApply }: OfferTableProps) => (
+const OfferTable = ({
+  offers,
+  canApply = false,
+  activeOfferIds = new Set(),
+  onApply,
+}: OfferTableProps) => (
   <div className="table-wrapper">
     <table className="data-table">
       <thead>
@@ -37,7 +43,11 @@ const OfferTable = ({ offers, canApply = false, onApply }: OfferTableProps) => (
             </td>
             {canApply && (
               <td>
-                <ApplicationAction offerId={offer.id} onApply={onApply} />
+                {activeOfferIds.has(offer.id) ? (
+                  "Déjà candidat"
+                ) : (
+                  <ApplicationAction offerId={offer.id} onApply={onApply} />
+                )}
               </td>
             )}
           </tr>
