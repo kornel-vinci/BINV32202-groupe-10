@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Matrice des guides et senseurs — Gesta</title>
+    <style>
+      :root {
+        --ink: #172033;
+        --muted: #5f6b7a;
+        --line: #dbe2ea;
+        --surface: #ffffff;
+        --background: #f4f7fb;
+        --guide: #2563eb;
+        --sensor: #0f766e;
+        --success: #166534;
+        --failure: #b42318;
+        --shadow: 0 12px 32px rgb(23 32 51 / 8%);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--background);
+        font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+
+      main {
+        width: min(1500px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 48px 0 64px;
+      }
+
+      header {
+        margin-bottom: 28px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        letter-spacing: -0.04em;
+      }
+
+      h2 {
+        margin: 0 0 16px;
+        font-size: 1.35rem;
+      }
+
+      .intro {
+        max-width: 900px;
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .table-card,
+      .summary {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        min-width: 1100px;
+        border-collapse: collapse;
+      }
+
+      caption {
+        padding: 18px 20px;
+        text-align: left;
+        font-weight: 700;
+        background: #eef3f9;
+      }
+
+      th,
+      td {
+        padding: 16px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        color: #334155;
+        font-size: 0.88rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        background: #f8fafc;
+      }
+
+      tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      tbody tr:hover {
+        background: #f8fbff;
+      }
+
+      code {
+        padding: 0.12em 0.35em;
+        border-radius: 5px;
+        color: #334155;
+        background: #eef2f7;
+        font: 0.9em/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+        overflow-wrap: anywhere;
+      }
+
+      .category {
+        min-width: 150px;
+        font-weight: 700;
+      }
+
+      .category small {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-weight: 500;
+      }
+
+      .guide {
+        color: var(--guide);
+      }
+
+      .sensor {
+        color: var(--sensor);
+      }
+
+      .status {
+        display: inline-block;
+        padding: 4px 9px;
+        border-radius: 999px;
+        font-size: 0.88rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .status.success {
+        color: var(--success);
+        background: #dcfce7;
+      }
+
+      .status.failure {
+        color: var(--failure);
+        background: #fee4e2;
+      }
+
+      .status.neutral {
+        color: #475569;
+        background: #e2e8f0;
+      }
+
+      .summary {
+        margin-top: 28px;
+        padding: 24px 28px;
+      }
+
+      .summary ul {
+        margin: 0;
+        padding-left: 1.3rem;
+      }
+
+      .summary li + li {
+        margin-top: 8px;
+      }
+
+      footer {
+        margin-top: 24px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 700px) {
+        main {
+          width: min(100% - 20px, 1500px);
+          padding-top: 28px;
+        }
+
+        .summary {
+          padding: 20px;
+        }
+      }
+
+      @media print {
+        body {
+          background: #fff;
+        }
+
+        main {
+          width: 100%;
+          padding: 0;
+        }
+
+        .table-card,
+        .summary {
+          box-shadow: none;
+        }
+
+        tbody tr:hover {
+          background: transparent;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Matrice des guides et senseurs</h1>
+        <p class="intro">
+          Inventaire des mécanismes de guidage (feedforward) et de retour (feedback)
+          présents dans le dépôt Gesta, avec leur nature et leur état de vérification
+          pendant la séance.
+        </p>
+      </header>
+
+      <section class="table-card" aria-labelledby="matrix-title">
+        <div class="table-wrap">
+          <table>
+            <caption id="matrix-title">Guides — feedforward et senseurs — feedback</caption>
+            <thead>
+              <tr>
+                <th scope="col">Catégorie</th>
+                <th scope="col">Mécanisme — fichier ou outil</th>
+                <th scope="col">Ce qu'il demande, impose ou vérifie</th>
+                <th scope="col">Exemple concret</th>
+                <th scope="col">État pendant la séance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="category guide">Guide — feedforward<small>Inférentiel</small></td>
+                <td><code>.github/copilot-instructions.md</code></td>
+                <td>Donne à Copilot les conventions d'architecture, d'authentification, de migrations et de tests.</td>
+                <td>« Garder l'accès SQL dans les repositories » ; « utiliser <code>HttpError</code> pour les erreurs API ».</td>
+                <td><span class="status success">Consulté et vérifié</span></td>
+              </tr>
+              <tr>
+                <td class="category guide">Guide — feedforward<small>Inférentiel</small></td>
+                <td><code>README.md</code> et <code>docs/architecture.md</code></td>
+                <td>Décrit l'organisation du projet, le flux backend/frontend et les commandes attendues.</td>
+                <td>Flux backend : <code>controllers → services → repositories → SQLite</code>.</td>
+                <td><span class="status success">Consultés et vérifiés</span></td>
+              </tr>
+              <tr>
+                <td class="category guide">Guide — feedforward<small>Inférentiel</small></td>
+                <td><code>backend/API.md</code></td>
+                <td>Décrit le contrat HTTP : routes, statuts, formats JSON, authentification et erreurs.</td>
+                <td>Une erreur doit respecter <code>{ "error": { "code", "message" } }</code>.</td>
+                <td><span class="status success">Consulté et vérifié</span></td>
+              </tr>
+              <tr>
+                <td class="category guide">Guide — feedforward<small>Inférentiel</small></td>
+                <td><code>docs/cdc_gesta_developpement.md</code></td>
+                <td>Donne les exigences fonctionnelles, règles métier, rôles et périmètre à respecter.</td>
+                <td>Un étudiant peut consulter les offres publiées et candidater.</td>
+                <td><span class="status success">Consulté et vérifié</span></td>
+              </tr>
+              <tr>
+                <td class="category guide">Guide — feedforward<small>Inférentiel</small></td>
+                <td><code>docs/semaine-7/plan.md</code></td>
+                <td>Guide de développement ciblé pour les candidatures étudiantes et leurs tests.</td>
+                <td>Une candidature active en double doit produire une erreur HTTP 409.</td>
+                <td><span class="status success">Consulté et vérifié</span></td>
+              </tr>
+              <tr>
+                <td class="category guide">Guide — feedforward<small>Computationnel</small></td>
+                <td><code>package.json</code>, packages workspace et configurations Oxlint</td>
+                <td>Définit les commandes exécutables et les règles automatiques de qualité.</td>
+                <td><code>npm run check</code> enchaîne lint, typage, tests et build ; Oxlint utilise <code>--deny-warnings</code>.</td>
+                <td><span class="status neutral">Exécuté partiellement et vérifié</span></td>
+              </tr>
+              <tr>
+                <td class="category guide">Guide — feedforward<small>Computationnel</small></td>
+                <td><code>.vscode/settings.json</code></td>
+                <td>Configure les permissions de Copilot, l'auto-approbation sélective et les limites de sandbox.</td>
+                <td>Les commandes de test et de build sont autorisées automatiquement ; les écritures hors workspace sont bloquées.</td>
+                <td><span class="status neutral">Consulté et vérifié, configuration non modifiée</span></td>
+              </tr>
+              <tr>
+                <td class="category guide">Guide — feedforward<small>Inférentiel</small></td>
+                <td><code>.github/pull_request_template.md</code></td>
+                <td>Impose une checklist de revue et de validation avant une pull request.</td>
+                <td>Vérifier les tests d'erreur, les droits backend, la documentation API et les migrations.</td>
+                <td><span class="status neutral">Consulté et vérifié, sans pull request</span></td>
+              </tr>
+              <tr>
+                <td class="category guide">Guide — feedforward<small>Computationnel</small></td>
+                <td><code>backend/src/db/migrations/002_active_application_unique.sql</code></td>
+                <td>Impose une contrainte SQLite sur les candidatures actives.</td>
+                <td>Index unique partiel sur <code>(offer_id, student_id)</code> lorsque <code>status = 'IN_PROGRESS'</code>.</td>
+                <td><span class="status success">Présent et vérifié</span></td>
+              </tr>
+              <tr>
+                <td class="category sensor">Senseur — feedback<small>Computationnel</small></td>
+                <td><strong>Oxlint</strong>, via <code>npm run lint</code></td>
+                <td>Analyse statiquement le code et signale les erreurs ou avertissements.</td>
+                <td>Deux avertissements bloquants dans <code>offers.service.ts</code> et <code>useApplications.ts</code>.</td>
+                <td><span class="status failure">Exécuté : échec</span></td>
+              </tr>
+              <tr>
+                <td class="category sensor">Senseur — feedback<small>Computationnel</small></td>
+                <td><strong>TypeScript</strong>, via <code>npm run typecheck</code></td>
+                <td>Vérifie la cohérence des types backend et frontend.</td>
+                <td><code>tsc --noEmit</code> côté backend et <code>tsc -b</code> côté frontend.</td>
+                <td><span class="status success">Exécuté : succès</span></td>
+              </tr>
+              <tr>
+                <td class="category sensor">Senseur — feedback<small>Computationnel</small></td>
+                <td><strong>Vitest</strong>, via <code>npm test</code></td>
+                <td>Exécute les tests backend et frontend : API, UI, permissions et migrations.</td>
+                <td>Frontend : 47 tests réussis. Backend : 110 réussis, 1 échec dans <code>migrations.test.ts</code>.</td>
+                <td><span class="status failure">Exécuté : échec global</span></td>
+              </tr>
+              <tr>
+                <td class="category sensor">Senseur — feedback<small>Computationnel</small></td>
+                <td><strong>Tests de migrations SQLite</strong>, <code>backend/tests/db/migrations.test.ts</code></td>
+                <td>Vérifient que les migrations créent le schéma attendu et ne sont pas appliquées deux fois.</td>
+                <td>Le test attend seulement <code>001_initial.sql</code>, mais le dépôt applique aussi <code>002_active_application_unique.sql</code>.</td>
+                <td><span class="status failure">Exécuté : échec vérifié</span></td>
+              </tr>
+              <tr>
+                <td class="category sensor">Senseur — feedback<small>Computationnel</small></td>
+                <td><strong>Build TypeScript/Vite</strong>, via <code>npm run build</code></td>
+                <td>Vérifie que le backend et le frontend peuvent être compilés et empaquetés.</td>
+                <td>Compilation backend, copie des migrations, compilation frontend et génération du bundle Vite.</td>
+                <td><span class="status success">Exécuté : succès</span></td>
+              </tr>
+              <tr>
+                <td class="category sensor">Senseur — feedback<small>Computationnel</small></td>
+                <td>Garde de version Node et test associé</td>
+                <td>Vérifie que l'environnement respecte la version minimale déclarée.</td>
+                <td>Le dépôt exige Node <code>&gt;=22.14.0</code> ; la séance utilisait Node <code>v22.14.0</code>.</td>
+                <td><span class="status success">Vérifié</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="summary" aria-labelledby="summary-title">
+        <h2 id="summary-title">Synthèse</h2>
+        <ul>
+          <li><strong>Guides inférentiels :</strong> instructions Copilot, documentation d'architecture, cahier des charges, contrat API et plan de développement.</li>
+          <li><strong>Guides computationnels :</strong> scripts npm, configurations TypeScript/Oxlint, paramètres VS Code et contraintes SQL.</li>
+          <li><strong>Senseurs computationnels :</strong> Oxlint, TypeScript, Vitest, tests de migrations, build et garde de version Node.</li>
+          <li><strong>Aucun senseur de revue de code par IA</strong> n'a été exécuté pendant cette séance.</li>
+          <li>Le mécanisme global <code>npm run check</code> <strong>échoue au lint</strong>, puis s'arrêterait également sur l'échec du test de migration.</li>
+        </ul>
+      </section>
+
+      <footer>
+        Document généré à partir de <code>docs/matrice.md</code>.
+      </footer>
+    </main>
+  </body>
+</html>
