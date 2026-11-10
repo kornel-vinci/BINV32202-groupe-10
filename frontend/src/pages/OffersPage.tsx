@@ -2,6 +2,8 @@ import EmptyState from "../components/EmptyState.tsx";
 import ErrorState from "../components/ErrorState.tsx";
 import LoadingState from "../components/LoadingState.tsx";
 import OfferTable from "../components/OfferTable.tsx";
+import { useApplications } from "../hooks/useApplications.ts";
+import { applyToOffer } from "../services/applications.service.ts";
 import { useOffers } from "../hooks/useOffers.ts";
 import type { User } from "../models/user.ts";
 
@@ -19,6 +21,7 @@ const DESCRIPTIONS = {
 
 const OffersPage = ({ user, token, onUnauthorized }: OffersPageProps) => {
   const { offers, isLoading, error } = useOffers(token, onUnauthorized);
+  const applications = useApplications(token, onUnauthorized, user.kind === "STUDENT");
 
   const renderContent = () => {
     if (error) return <ErrorState message={error} />;
@@ -29,7 +32,18 @@ const OffersPage = ({ user, token, onUnauthorized }: OffersPageProps) => {
         <p className="result-count">
           {offers.length} offre{offers.length > 1 ? "s" : ""}
         </p>
-        <OfferTable offers={offers} />
+        <OfferTable
+          offers={offers}
+          canApply={user.kind === "STUDENT"}
+          activeOfferIds={
+            new Set(
+              applications.applications
+                .filter((application) => application.status === "IN_PROGRESS")
+                .map((application) => application.offerId),
+            )
+          }
+          onApply={(offerId, message) => applyToOffer(token, offerId, message)}
+        />
       </>
     );
   };

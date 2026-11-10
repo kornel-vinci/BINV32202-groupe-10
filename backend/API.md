@@ -168,3 +168,58 @@ récente à la plus ancienne, puis de la plus récente à la plus ancienne.
 
 - `401` `UNAUTHENTICATED` : session absente ou invalide.
 - `403` `FORBIDDEN` : contact seulement promoteur ou signataire.
+
+## GET /applications
+
+Retourne les candidatures de l'étudiant connecté, triées de la plus récente à la plus
+ancienne. Un autre profil reçoit `403`.
+
+### Requête
+
+- Header `Authorization` obligatoire
+
+### Réponses
+
+- `200` : tableau de candidatures
+
+```json
+[
+  {
+    "id": 1,
+    "offerId": 1,
+    "offerTitle": "Application React de gestion de flotte",
+    "companyShortName": "Lumen Digital",
+    "academicYear": "2026-2027",
+    "period": "P2",
+    "message": "Le développement React m'intéresse particulièrement.",
+    "status": "IN_PROGRESS",
+    "appliedAt": "2026-10-02 18:10:00"
+  }
+]
+```
+
+`status` vaut `IN_PROGRESS` (En cours), `SELECTED` (Retenue), `REJECTED` (Non retenue)
+ou `WITHDRAWN` (Retirée).
+
+- `401` `UNAUTHENTICATED` : session absente ou invalide.
+- `403` `FORBIDDEN` : l'utilisateur connecté n'est pas un étudiant.
+
+## DELETE /applications/:id
+
+Retire la candidature de l'étudiant connecté. Cette action est possible uniquement
+tant que la candidature est `IN_PROGRESS` ; elle conserve la candidature avec le statut
+`WITHDRAWN`.
+
+### Requête
+
+- Header `Authorization` obligatoire
+- Paramètre de chemin `id` : identifiant positif de la candidature
+
+### Réponses
+
+- `204` : candidature retirée, sans contenu
+- `400` `INVALID_QUERY` : identifiant invalide
+- `401` `UNAUTHENTICATED` : session absente ou invalide
+- `403` `FORBIDDEN` : l'utilisateur connecté n'est pas un étudiant
+- `404` `NOT_FOUND` : candidature absente ou appartenant à un autre étudiant
+- `409` `APPLICATION_ALREADY_PROCESSED` : candidature déjà traitée ou déjà retirée
