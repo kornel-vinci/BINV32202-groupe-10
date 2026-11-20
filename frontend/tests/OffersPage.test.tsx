@@ -52,6 +52,46 @@ const stubStudentOffers = (postResponder = () =>
   });
 
 describe("OffersPage", () => {
+  it("recherche les offres par expression dans leur titre", async () => {
+    const fetchMock = stubFetch({
+      "/api/offers": (input) => {
+        const search = new URL(String(input), "http://localhost").searchParams.get("q");
+        return Response.json(search === "portail client" ? [offers[0]] : offers);
+      },
+    });
+
+    render(<OffersPage user={adminUser} token="jeton" onUnauthorized={vi.fn()} />);
+
+    fireEvent.change(await screen.findByLabelText("Rechercher par titre"), {
+      target: { value: "  portail client  " },
+    });
+
+    expect(await screen.findByText("Refonte du portail client")).toBeInTheDocument();
+    expect(screen.queryByText("Tableau de bord de qualité des données")).not.toBeInTheDocument();
+    expect(
+      fetchMock.mock.calls.some(([input]) => {
+        return new URL(String(input), "http://localhost").searchParams.get("q") === "portail client";
+      }),
+    ).toBe(true);
+  });
+
+  it("affiche un message adapté quand la recherche ne retourne aucune offre", async () => {
+    stubFetch({
+      "/api/offers": (input) => {
+        const search = new URL(String(input), "http://localhost").searchParams.get("q");
+        return Response.json(search === "inexistant" ? [] : offers);
+      },
+    });
+
+    render(<OffersPage user={adminUser} token="jeton" onUnauthorized={vi.fn()} />);
+
+    fireEvent.change(await screen.findByLabelText("Rechercher par titre"), {
+      target: { value: "inexistant" },
+    });
+
+    expect(await screen.findByText("Aucune offre ne correspond à votre recherche.")).toBeInTheDocument();
+  });
+
   it("affiche les offres avec leurs libellés français", async () => {
     stubFetch({ "/api/offers": () => Response.json(offers) });
 
