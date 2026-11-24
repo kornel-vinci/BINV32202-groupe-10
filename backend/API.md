@@ -145,6 +145,10 @@ récente à la plus ancienne, puis de la plus récente à la plus ancienne.
 ### Requête
 
 - Header `Authorization` obligatoire
+- Paramètre facultatif `q` : expression recherchée dans le titre, sans distinguer les
+  majuscules et les minuscules. Les espaces au début et à la fin sont ignorés ; une valeur
+  vide est ignorée. Si plusieurs mots sont saisis, l'expression entière est recherchée.
+  100 caractères au maximum.
 
 ### Réponses
 
@@ -168,6 +172,7 @@ récente à la plus ancienne, puis de la plus récente à la plus ancienne.
 
 - `401` `UNAUTHENTICATED` : session absente ou invalide.
 - `403` `FORBIDDEN` : contact seulement promoteur ou signataire.
+- `400` `INVALID_QUERY` : paramètre `q` répété ou dépassant 100 caractères.
 
 ## GET /applications
 
