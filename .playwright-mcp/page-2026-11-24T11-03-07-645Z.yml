@@ -1,0 +1,67 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]: Gesta
+    - navigation "Navigation principale" [ref=e121]:
+      - link "Accueil" [ref=e122] [cursor=pointer]:
+        - /url: /
+      - link "Offres" [active] [ref=e123] [cursor=pointer]:
+        - /url: /offres
+      - link "Mes candidatures" [ref=e124] [cursor=pointer]:
+        - /url: /candidatures
+      - link "Entreprises" [ref=e125] [cursor=pointer]:
+        - /url: /entreprises
+    - generic [ref=e126]:
+      - generic [ref=e127]:
+        - strong [ref=e128]: Louis Claes
+        - generic [ref=e129]: Étudiant
+      - button "Changer d'utilisateur" [ref=e130] [cursor=pointer]
+  - note [ref=e5]: Mode démo — connexion sans mot de passe, réservée au développement local.
+  - main [ref=e6]:
+    - generic [ref=e135]:
+      - heading "Offres de stage" [level=1] [ref=e136]
+      - paragraph [ref=e137]: Les offres publiées.
+      - generic [ref=e138]:
+        - generic [ref=e139]: Rechercher par titre
+        - searchbox "Rechercher par titre" [ref=e140]
+      - paragraph [ref=e141]: 4 offres
+      - table [ref=e143]:
+        - rowgroup [ref=e144]:
+          - row [ref=e145]:
+            - columnheader "Titre" [ref=e146]
+            - columnheader "Entreprise" [ref=e147]
+            - columnheader "Année" [ref=e148]
+            - columnheader "Période" [ref=e149]
+            - columnheader "Statut" [ref=e150]
+            - columnheader "Action" [ref=e151]
+        - rowgroup [ref=e152]:
+          - row [ref=e153]:
+            - cell "Assistant conversationnel interne" [ref=e154]
+            - cell "Nexalis" [ref=e155]
+            - cell "2026-2027" [ref=e156]
+            - cell "P2" [ref=e157]
+            - cell "Publiée" [ref=e158]
+            - cell [ref=e160]:
+              - button "Candidater" [ref=e161] [cursor=pointer]
+          - row [ref=e162]:
+            - cell "Tableau de bord de qualité des données" [ref=e163]
+            - cell "Lumen Data" [ref=e164]
+            - cell "2026-2027" [ref=e165]
+            - cell "P2" [ref=e166]
+            - cell "Publiée" [ref=e167]
+            - cell [ref=e169]:
+              - button "Candidater" [ref=e170] [cursor=pointer]
+          - row [ref=e171]:
+            - cell "Application React de gestion de flotte" [ref=e172]
+            - cell "Lumen Digital" [ref=e173]
+            - cell "2026-2027" [ref=e174]
+            - cell "P2" [ref=e175]
+            - cell "Publiée" [ref=e176]
+            - cell [ref=e178]:
+              - button "Candidater" [ref=e179] [cursor=pointer]
+          - row [ref=e180]:
+            - cell "API REST de facturation" [ref=e181]
+            - cell "Orbis" [ref=e182]
+            - cell "2026-2027" [ref=e183]
+            - cell "P2" [ref=e184]
+            - cell "Publiée" [ref=e185]
+            - cell "Déjà candidat" [ref=e187]
